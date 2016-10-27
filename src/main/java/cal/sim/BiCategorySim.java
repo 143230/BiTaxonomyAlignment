@@ -18,7 +18,7 @@ public class BiCategorySim {
     public static final double alpa_t = 1,beta_t=0.1;
     private static final double lr_r=1e-3, lr_k = 1e-6;
     private static final int topic_num = 50;
-    private static final int sample_round = 2000;
+    private static final int sample_round = 200;
     private static final int num_vector_r = 107;
     private static final int num_vector_k = 50;
 
@@ -218,7 +218,9 @@ public class BiCategorySim {
         }
         Set<Article> articles_compare = new HashSet<Article>();
         for(Article article:predictMap.keySet()){
+            if(article==null)continue;
             articles_compare.add(article);
+            articles_compare.add(predictMap.get(article));
         }
         for(final Article article1:predictMap.keySet()){
             Article article2 = predictMap.get(article1);
@@ -480,24 +482,24 @@ public class BiCategorySim {
     {
         MustSet mustSet=mustSets.getMustSet(s);
         for (int i = 0; i < mustSet.size(); i++) {
-            if(mustSet.getWordstr(i).equals(word.word1) || mustSet.getWordstr(i).equals(word.word2)){
-                if(flag==1){
-                    number_topic_set[k][s]++;
-                    number_per_topic[k]++;
-                }
-                else{
-                    number_topic_set[k][s]--;
-                    number_per_topic[k]--;
-                }
-            }
-            else{
-                if(flag==1){
-                    number_topic_set[k][s]+=0.2;
-                    number_per_topic[k]+=0.2;
-                }
-                else{
-                    number_topic_set[k][s]-=0.2;
-                    number_per_topic[k]-=0.2;
+            for(int j=i;j<mustSet.size();j++) {
+                if ((mustSet.getWordstr(i).equals(word.word1) && mustSet.getWordstr(j).equals(word.word2))
+                        || (mustSet.getWordstr(j).equals(word.word1) && mustSet.getWordstr(i).equals(word.word2))) {
+                    if (flag == 1) {
+                        number_topic_set[k][s]+=2;
+                        number_per_topic[k]+=2;
+                    } else {
+                        number_topic_set[k][s]-=2;
+                        number_per_topic[k]-=2;
+                    }
+                } else {
+                    if (flag == 1) {
+                        number_topic_set[k][s] += 0.2;
+                        number_per_topic[k] += 0.2;
+                    } else {
+                        number_topic_set[k][s] -= 0.2;
+                        number_per_topic[k] -= 0.2;
+                    }
                 }
             }
         }
@@ -772,7 +774,7 @@ public class BiCategorySim {
         List<Article> articles = new ArrayList<Article>();
         String line;
         int line_number=0;
-        final int other_max_article = 0;
+        final int other_max_article = 20000;
         int other_articl = 0;
         while((line = br.readLine())!=null){
             line = line.toLowerCase();
