@@ -580,7 +580,15 @@ public class BiCategorySim {
                     double vector_k_e2 = word.getVector2ByIndex(e);
                     square_sum_x_k[old_topic][old_set][e] -= (vector_k_e2*vector_k_e2 + vector_k_e1*vector_k_e1);
                     average_x_k[old_topic][old_set][e] -= (vector_k_e1 + vector_k_e2);
-                    square_sum_x_k[topic_index][semantic_index][e] += vector_k_e2 * vector_k_e2 + vector_k_e1 * vector_k_e1;
+                    try{
+                        square_sum_x_k[topic_index][semantic_index][e] += vector_k_e2 * vector_k_e2 + vector_k_e1 * vector_k_e1;
+                    }catch (Error a){
+                        System.out.println(topic_index);
+                        System.out.println(semantic_index);
+                        System.out.println(selectedMustset);
+                        System.out.println(e);
+                        throw a;
+                    }
                     average_x_k[topic_index][semantic_index][e] += vector_k_e1 + vector_k_e2;
                 }
                 article.initDistribution(old_topic,topic_index);
