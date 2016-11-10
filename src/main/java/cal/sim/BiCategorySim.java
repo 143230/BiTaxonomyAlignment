@@ -690,6 +690,8 @@ public class BiCategorySim {
     }
 
     private static double calculateTopicProb(Article article,int t,int s,Word word) {
+        Word title = article.getTitleWords();
+        double n_d_yd = number_topic_semantic[title.getTopicIndex()][title.getSemanticIndex()];
         int n_d_t = article.getTopicByIndex(t);
         double n_t_s = (number_topic_semantic[t][s] + beta_t)/(number_per_topic[t] + S*beta_t);
         double gaussian_quote_part = 0;
@@ -698,7 +700,7 @@ public class BiCategorySim {
             gaussian_quote_part += gaussian_quote;
         }
         ASSERT(gaussian_quote_part);
-        return Math.log(n_d_t+alpa_t)+Math.log(n_t_s)+gaussian_quote_part;
+        return Math.log(n_d_yd) + Math.log(n_d_t+alpa_t)+Math.log(n_t_s)+gaussian_quote_part;
     }
 
     private static double GaussianQote(int t,int s, int e, double[][][] square_sum_x, double[][][] average_x,Word word,int n) {
