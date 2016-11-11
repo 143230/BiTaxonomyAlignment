@@ -689,6 +689,7 @@ public class BiCategorySim {
                 return k;
             }
         }
+        assert false : "sample topic and semantic must be larger than zero. actually:"+u;
         return -1;
     }
 
@@ -715,7 +716,7 @@ public class BiCategorySim {
             gaussian_quote_part += gaussian_quote;
         }
         ASSERT(gaussian_quote_part);
-        return Math.log(n_d_yd) + Math.log(n_d_t+alpa_t)+Math.log(n_t_s)+gaussian_quote_part;
+        return Math.log(n_d_yd+lr_k) + Math.log(n_d_t+alpa_t)+Math.log(n_t_s)+gaussian_quote_part;
     }
 
     private static double GaussianQote(int t,int s, int e, double[][][] square_sum_x, double[][][] average_x,Word word,int n) {
